@@ -1,34 +1,16 @@
-import time
-import pyautogui
+import os
 
-def delete_folder(folder_name):
-    # Open File Explorer
-    pyautogui.hotkey('winleft', 'e')
-    time.sleep(1)  # Wait for File Explorer to open
+def delete_folder(folder_path):
+    # Delete the folder and all of its contents
+    for root, dirs, files in os.walk(folder_path, topdown=False):
+        for name in files:
+            os.remove(os.path.join(root, name))
+        for name in dirs:
+            os.rmdir(os.path.join(root, name))
+    os.rmdir(folder_path)
 
-    # Focus on the address bar
-    pyautogui.hotkey('alt', 'd')
-    time.sleep(1)  # Wait for focus
-
-    # Type the path of the folder
-    pyautogui.write(folder_name)
-    pyautogui.press('enter')
-    time.sleep(1)  # Wait for the folder to open
-
-    # Select all items in the folder
-    pyautogui.hotkey('ctrl', 'a')
-    time.sleep(1)  # Wait for items to be selected
-
-    # Delete the selected items
-    pyautogui.press('delete')
-    time.sleep(1)  # Wait for confirmation dialog to appear
-
-    # Confirm the deletion (press Enter)
-    pyautogui.press('enter')
-    time.sleep(1)  # Wait for deletion process to complete
-
-    print(f"Folder '{folder_name}' deleted successfully.")
+    print(f"Folder '{folder_path}' deleted successfully.")
 
 if __name__ == "__main__":
-    folder_name_to_delete = input("Enter the name of the folder to delete: ")
-    delete_folder(folder_name_to_delete)
+    folder_path_to_delete = input("Enter the path of the folder to delete: ")
+    delete_folder(folder_path_to_delete)
